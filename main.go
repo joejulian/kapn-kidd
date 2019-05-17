@@ -20,6 +20,8 @@ import (
 	"flag"
 	"os"
 
+	helmv1alpha1 "github.com/joejulian/kapn-kidd/api/v1alpha1"
+	"github.com/joejulian/kapn-kidd/controllers"
 	"k8s.io/apimachinery/pkg/runtime"
 	_ "k8s.io/client-go/plugin/pkg/client/auth/gcp"
 	ctrl "sigs.k8s.io/controller-runtime"
@@ -34,6 +36,7 @@ var (
 
 func init() {
 
+	helmv1alpha1.AddToScheme(scheme)
 	// +kubebuilder:scaffold:scheme
 }
 
@@ -50,6 +53,14 @@ func main() {
 		os.Exit(1)
 	}
 
+	err = (&controllers.ReleaseReconciler{
+		Client: mgr.GetClient(),
+		Log:    ctrl.Log.WithName("controllers").WithName("Release"),
+	}).SetupWithManager(mgr)
+	if err != nil {
+		setupLog.Error(err, "unable to create controller", "controller", "Release")
+		os.Exit(1)
+	}
 	// +kubebuilder:scaffold:builder
 
 	setupLog.Info("starting manager")
