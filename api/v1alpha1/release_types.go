@@ -17,6 +17,7 @@ limitations under the License.
 package v1alpha1
 
 import (
+	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -25,8 +26,19 @@ import (
 
 // ReleaseSpec defines the desired state of Release
 type ReleaseSpec struct {
-	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
+	Chart                *string                     `json:"chart,omitempty"`
+	Devel                *bool                       `json:"devel,omitempty"`
+	GenerateNameTemplate *string                     `json:"name-template,omitempty"`
+	NoHooks              *bool                       `json:"no-hooks,omitempty"`
+	PasswordRef          corev1.SecretReference      `json:"password,omitempty"`
+	Repo                 *string                     `json:"repo,omitempty"`
+	Settings             []corev1.EnvVar             `json:"settings,omitempty"`
+	SetFromObj           corev1.LocalObjectReference `json:"set-from-obj,omitempty"`
+	Timeout              *string                     `json:"timeout,omitempty"`
+	Username             *string                     `json:"username,omitempty"`
+	Values               *string                     `json:"values,omitempty"`
+	ValuesRef            corev1.LocalObjectReference `json:"values-ref,omitempty"`
+	Version              *string                     `json:"version"`
 }
 
 // ReleaseStatus defines the observed state of Release
